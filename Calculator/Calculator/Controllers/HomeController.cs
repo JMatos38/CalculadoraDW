@@ -7,7 +7,7 @@ namespace Calculator.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
+        //teste
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;

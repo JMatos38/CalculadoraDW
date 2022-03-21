@@ -7,17 +7,24 @@ namespace Calculator.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        //teste
+
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
+
+        [HttpGet] // este anotador é facultativo
+        // return View(), mas qual view?, o codigo procura a view com o nome "Index"
         public IActionResult Index()
         {
             return View();
         }
-
+        [HttpPost] // só quando o formulario for submetido em "post" ele sera acionado
+        public IActionResult Index(String botao)
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

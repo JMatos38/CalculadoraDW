@@ -1,5 +1,4 @@
-﻿
-using Calculator.Models;
+﻿using Calculator.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -22,9 +21,17 @@ namespace Calculator.Controllers
 
             return View();
         }
-
+        /// <summary>
+        /// prepara a calculadora na segunda interação, e seguintes
+        /// </summary>
+        /// <param name="botao">valor do botão selecionado pelo utilizador</param>
+        /// <param name="visor">valor do visor</param>
+        /// <param name="primeiroOperando">valor do primeiro operando na operação algebrica</param>
+        /// <param name="operador">valor do operador da operação algebrica selecionada</param>
+        /// <param name="limpa">flag usada para verificar se o Visor deve ser ou nao reiniciado </param>
+        /// <returns></returns>
         [HttpPost] //Quando o formulário for submetido em 'post', ele será acionado
-        public IActionResult Index(string botao, string visor, string primeiroOperando, string operador, double result, string LimpaEcra)
+        public IActionResult Index(string botao, string visor, string primeiroOperando, string operador, string limpa)
         {
 
 
@@ -44,15 +51,15 @@ namespace Calculator.Controllers
                 case "0":
                     //pressionou um algarismo
                     //Sugestão -> Fazer de forma algébrica
-                    if (visor == "0" || LimpaEcra == "sim")
+                    if (visor == "0" || limpa == "sim")
                     {
                         visor = botao;
                     }
                     else
                     {
-                        LimpaEcra = "nao";
                         visor += botao;
                     }
+                    limpa = "nao";
                     break;
 
                 case ",":
@@ -78,54 +85,46 @@ namespace Calculator.Controllers
 
                 case "C":
                     visor = "0";
-                    primeiroOperando = "0";
-                    operador = "0";
+                    limpa = "sim";
+                    primeiroOperando = "";
+                    operador = "";
                     break;
 
                 case "+":
-                    if(operador != "0") {
+                case "-":
+                case "x":
+                case ":":
+                    //pressionado um operador
+                    if (!string.IsNullOrEmpty(operador))
+                    {
+                        //fazer a operação
+                        double operandoUm = Convert.ToDouble(primeiroOperando.Replace(",", "."));
+                        double operandoDois = Convert.ToDouble(visor.Replace(",", "."));
+                        double result = 0;
                         switch (operador)
                         {
                             case "+":
-
-                                result = Convert.ToDouble(visor) + Convert.ToDouble(primeiroOperando);
-                                
-
+                                result = operandoUm + operandoDois;
                                 break;
+
+                            case "x":
+                                result = operandoUm * operandoDois;
+                                break;
+
                             case "-":
-                                result =Convert.ToDouble(visor) - Convert.ToDouble(primeiroOperando);
-                                
+                                result = operandoUm - operandoDois;
                                 break;
 
-                            case "*":
-                                result = Convert.ToDouble(visor) * Convert.ToDouble(primeiroOperando);
-                                
-                                break;
                             case ":":
-                                result = Convert.ToDouble(visor) / Convert.ToDouble(primeiroOperando);
-                               
+                                result = operandoUm / operandoDois;
                                 break;
-                                visor = Convert.ToString(result);
-                                primeiroOperando = visor;
-
 
                         }
-                    
-                    
-                    
+                        visor = result + "";
                     }
-
-                    primeiroOperando = visor;
-                    visor = "0";
-                    operador = botao;
-
-                    break;
-
-                case "-":
-                case "*":
-                case ":":
                     primeiroOperando = visor;
                     operador = botao;
+                    limpa = "sim";
 
 
                     break;
@@ -136,6 +135,7 @@ namespace Calculator.Controllers
             ViewBag.Visor = visor;
             ViewBag.PrimeiroOperando = primeiroOperando;
             ViewBag.Operador = operador;
+            ViewBag.Limpa = limpa;
             return View();
         }
 

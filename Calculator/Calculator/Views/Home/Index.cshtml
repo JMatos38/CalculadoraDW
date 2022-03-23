@@ -1,16 +1,21 @@
 ﻿@{
-   ViewData["Title"] = "Calculadora";
+   ViewData["Title"] = "Calculator";
 }
 
 <div class="text-center">
-   <h1 class="display-4">Calculadora</h1>
+   <h1 class="display-4">Calculator</h1>
    <h4>Exemplificação da interação entre o <i>Cliente</i> e o <i>Servidor</i>.</h4>
 </div>
 
-  <form method="post">
 
 
-  <table border="0"
+<form method="post">
+    
+    <!-- fazer com que o primeiro numero (apos carregar no operador) e o operador nao sejam visiveis-->
+    <input type="hidden" name="primeiroOperando" value="@ViewBag.PrimeiroOperando" />
+    <input type="hidden" name="operador" value="@ViewBag.Operador" />
+
+<table border="0"
           style="border-spacing:3px;
                  border-collapse:collapse;
                  border: 1px solid #808080;
@@ -18,9 +23,10 @@
                  margin-right:auto;">
       <tr>
          <td colspan="4">
+             <!-- Ter acesso ao C#. sem o arroba seria apenas texto e iria aparecer "ViewBag.Visor"-->
             <input type="text"
                    name="visor"
-                   value=""
+                   value="@ViewBag.Visor" 
                    readonly="readonly"
                    style="text-align:right;
                           width:167px;"
@@ -29,7 +35,7 @@
       </tr>
       <tr>
          <td colspan="2">
-              <!--o id é para o javascript trabalhar com o "elemento" o name é para o controller-->
+            <!-- COMENTARIO-->
             <input type="submit" value="C" name="botao" class="btn btn-outline-danger" style="height:40px;width:82px;" />
          </td>
          <td>
@@ -94,5 +100,4 @@
       </tr>
    </table>
 
-   </form>
-
+</form>
